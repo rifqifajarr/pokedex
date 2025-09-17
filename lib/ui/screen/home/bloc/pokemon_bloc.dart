@@ -24,9 +24,12 @@ class PokemonBloc extends Bloc<PokemonEvent, PokemonState> {
       }
     });
     on<PutDataToDbEvent>((event, emit) async {
+      debugPrint("masukkk");
       for (final p in _remoteData) {
         await db.insertPokemon(p);
       }
+      final test = await db.getAllPokemon();
+      debugPrint("isi db: $test");
       emit(DataAddedToDb());
     });
   }

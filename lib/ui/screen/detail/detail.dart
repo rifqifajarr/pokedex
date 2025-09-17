@@ -57,14 +57,13 @@ class _DetailState extends State<Detail> {
                       onPressed: () {},
                     ),
                   ),
-                  const Positioned(
+                  Positioned(
                     bottom: 0,
                     left: 0,
                     right: 0,
                     child: Center(
                       child: CustomImage(
-                        url:
-                            'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png',
+                        url: widget.data.imageurl,
                         width: 250,
                         height: 250,
                       ),
@@ -200,14 +199,10 @@ class _DetailState extends State<Detail> {
                   SizedBox(height: 20),
                   Text("Evolution", style: textTheme(context).titleMedium),
                   SizedBox(height: 10),
-                  // TODO: ambil data evolution dari id
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: _buildEvolutionItem("test", "1", false),
-                  ),
+
+                  // TODO: implement Evolution feature
+                  _buildEvolution(context, widget.data),
+                  SizedBox(height: 32),
                 ],
               ),
             ),
@@ -216,6 +211,92 @@ class _DetailState extends State<Detail> {
       ),
     );
   }
+}
+
+Widget _buildEvolution(BuildContext context, PokemonResponse data) {
+  return Container(
+    decoration: BoxDecoration(
+      border: BoxBorder.all(),
+      borderRadius: BorderRadius.circular(15),
+    ),
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(12),
+          child: Container(
+            height: 76,
+            decoration: BoxDecoration(
+              border: BoxBorder.all(),
+              borderRadius: BorderRadius.circular(50),
+            ),
+            child: Row(
+              children: [
+                Container(
+                  width: 138,
+                  decoration: BoxDecoration(
+                    color: getTypeColor(context, data.typeofpokemon.first),
+                    borderRadius: BorderRadius.circular(50),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    child: Center(
+                      child: CustomImage(
+                        url: data.imageurl,
+                        width: 92,
+                        height: 92,
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 16),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(data.name, style: textTheme(context).titleLarge),
+                    SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Container(
+                          width: 92,
+                          height: 22,
+                          decoration: BoxDecoration(
+                            color: getTypeColor(
+                              context,
+                              data.typeofpokemon.first,
+                            ),
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          child: Image.asset(
+                            getTypeIconAsset(data.typeofpokemon.first),
+                            width: 22,
+                            height: 22,
+                          ),
+                        ),
+                        Container(
+                          width: 92,
+                          height: 22,
+                          decoration: BoxDecoration(
+                            color: getTypeColor(context, data.typeofpokemon[1]),
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          child: Image.asset(
+                            getTypeIconAsset(data.typeofpokemon[1]),
+                            width: 22,
+                            height: 22,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
 }
 
 Widget _buildStatItem(String label, String value) {
@@ -267,61 +348,6 @@ Widget _buildStatItem(String label, String value) {
             ),
           ),
         ),
-      ],
-    ),
-  );
-}
-
-Widget _buildEvolutionItem(String name, String number, bool isSelected) {
-  return Container(
-    padding: const EdgeInsets.all(12),
-    decoration: BoxDecoration(
-      color: isSelected
-          ? const Color(0xFF6FBF73).withOpacity(0.1)
-          : Colors.grey.withOpacity(0.1),
-      borderRadius: BorderRadius.circular(12),
-    ),
-    child: Row(
-      children: [
-        Container(
-          width: 50,
-          height: 50,
-          decoration: BoxDecoration(
-            color: const Color(0xFF6FBF73),
-            borderRadius: BorderRadius.circular(25),
-          ),
-          child: const Icon(
-            Icons.catching_pokemon,
-            color: Colors.white,
-            size: 24,
-          ),
-        ),
-        const SizedBox(width: 12),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              name,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: isSelected ? const Color(0xFF6FBF73) : Colors.black87,
-              ),
-            ),
-            Text(
-              '#$number',
-              style: const TextStyle(fontSize: 12, color: Colors.grey),
-            ),
-          ],
-        ),
-        const Spacer(),
-        // Row(
-        //   children: [
-        //     _buildSmallTypeChip(const Color(0xFF6FBF73)),
-        //     const SizedBox(width: 4),
-        //     _buildSmallTypeChip(const Color(0xFFA569BD)),
-        //   ],
-        // ),
       ],
     ),
   );

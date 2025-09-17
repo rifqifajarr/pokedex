@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pokedex/core/resources/themes.dart';
 import 'package:pokedex/core/utils/extension.dart';
-import 'package:pokedex/data/db_helper.dart';
 import 'package:pokedex/ui/components/custom_search_bar.dart';
 import 'package:pokedex/ui/components/custom_shimmer.dart';
 import 'package:pokedex/ui/components/pokemon_item.dart';
@@ -26,15 +25,6 @@ class _HomeState extends State<Home> {
     super.initState();
     _searchController = TextEditingController();
     context.read<PokemonBloc>().add(FetchPokemonEvent());
-    _checkData();
-  }
-
-  Future<void> _checkData() async {
-    final db = PokemonDatabase.instance;
-    final isDataAvailable = await db.hasData();
-    if (!isDataAvailable) {
-      context.read<PokemonBloc>().add(PutDataToDbEvent());
-    }
   }
 
   @override
@@ -132,9 +122,7 @@ class _HomeState extends State<Home> {
                           SizedBox(height: 12),
                     );
                   }
-                  return Center(
-                    child: Text("Kesalahan Ketika Mendapatkan Data"),
-                  );
+                  return Center(child: Text("Tidak Ada Data"));
                 },
               ),
             ),

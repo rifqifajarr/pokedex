@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pokedex/core/resources/colors.dart';
 import 'package:pokedex/core/resources/themes.dart';
+import 'package:pokedex/data/db_helper.dart';
 import 'package:pokedex/data/pokemon_service.dart';
+import 'package:pokedex/ui/screen/favorite/bloc/favorite_bloc.dart';
 import 'package:pokedex/ui/screen/favorite/favorite.dart';
 import 'package:pokedex/ui/screen/home/bloc/pokemon_bloc.dart';
 import 'package:pokedex/ui/screen/home/home.dart';
@@ -21,6 +23,9 @@ class MainApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => PokemonBloc(PokemonService())),
+        BlocProvider(
+          create: (context) => FavoriteBloc(PokemonDatabase.instance),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

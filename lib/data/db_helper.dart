@@ -102,41 +102,7 @@ class PokemonDatabase {
     final db = await instance.database;
     final maps = await db.query('pokemon');
 
-    return maps.map((map) {
-      return PokemonResponse(
-        id: map['id'] as String,
-        name: map['name'] as String,
-        imageurl: map['imageurl'] as String,
-        xdescription: map['xdescription'] as String,
-        ydescription: map['ydescription'] as String,
-        height: map['height'] as String,
-        category: map['category'] as String,
-        weight: map['weight'] as String,
-        typeofpokemon: (jsonDecode(map['typeofpokemon'] as String) as List)
-            .map((e) => typeofpokemonValues.map[e] ?? Typeofpokemon.NONE)
-            .toList(),
-        weaknesses: (jsonDecode(map['weaknesses'] as String) as List)
-            .map((e) => typeofpokemonValues.map[e] ?? Typeofpokemon.NONE)
-            .toList(),
-        evolutions: List<String>.from(jsonDecode(map['evolutions'] as String)),
-        abilities: List<String>.from(jsonDecode(map['abilities'] as String)),
-        hp: map['hp'] as int,
-        attack: map['attack'] as int,
-        defense: map['defense'] as int,
-        specialAttack: map['specialAttack'] as int,
-        specialDefense: map['specialDefense'] as int,
-        speed: map['speed'] as int,
-        total: map['total'] as int,
-        malePercentage: malePercentageValues.map[map['malePercentage']],
-        femalePercentage: malePercentageValues.map[map['femalePercentage']],
-        genderless: map['genderless'] as int,
-        cycles: cyclesValues.map[map['cycles']] ?? Cycles.EMPTY,
-        eggGroups: map['eggGroups'] as String,
-        evolvedfrom: map['evolvedfrom'] as String,
-        reason: map['reason'] as String,
-        baseExp: map['baseExp'] as String,
-      );
-    }).toList();
+    return _mapToPokemonList(maps);
   }
 
   Future<List<PokemonResponse>> getFavorites() async {
@@ -147,41 +113,7 @@ class PokemonDatabase {
       whereArgs: [1],
     );
 
-    return maps.map((map) {
-      return PokemonResponse(
-        id: map['id'] as String,
-        name: map['name'] as String,
-        imageurl: map['imageurl'] as String,
-        xdescription: map['xdescription'] as String,
-        ydescription: map['ydescription'] as String,
-        height: map['height'] as String,
-        category: map['category'] as String,
-        weight: map['weight'] as String,
-        typeofpokemon: (jsonDecode(map['typeofpokemon'] as String) as List)
-            .map((e) => typeofpokemonValues.map[e] ?? Typeofpokemon.NONE)
-            .toList(),
-        weaknesses: (jsonDecode(map['weaknesses'] as String) as List)
-            .map((e) => typeofpokemonValues.map[e] ?? Typeofpokemon.NONE)
-            .toList(),
-        evolutions: List<String>.from(jsonDecode(map['evolutions'] as String)),
-        abilities: List<String>.from(jsonDecode(map['abilities'] as String)),
-        hp: map['hp'] as int,
-        attack: map['attack'] as int,
-        defense: map['defense'] as int,
-        specialAttack: map['specialAttack'] as int,
-        specialDefense: map['specialDefense'] as int,
-        speed: map['speed'] as int,
-        total: map['total'] as int,
-        malePercentage: malePercentageValues.map[map['malePercentage']],
-        femalePercentage: malePercentageValues.map[map['femalePercentage']],
-        genderless: map['genderless'] as int,
-        cycles: cyclesValues.map[map['cycles']] ?? Cycles.EMPTY,
-        eggGroups: map['eggGroups'] as String,
-        evolvedfrom: map['evolvedfrom'] as String,
-        reason: map['reason'] as String,
-        baseExp: map['baseExp'] as String,
-      );
-    }).toList();
+    return _mapToPokemonList(maps);
   }
 
   Future<void> toggleFavorite(String id, bool isFavorite) async {
@@ -204,5 +136,67 @@ class PokemonDatabase {
   Future close() async {
     final db = await instance.database;
     db.close();
+  }
+
+  Future<List<PokemonResponse>> searchByName(String keyword) async {
+    final db = await instance.database;
+    final maps = await db.query(
+      'pokemon',
+      where: 'LOWER(name) LIKE ?',
+      whereArgs: ['%${keyword.toLowerCase()}%'],
+    );
+
+    return _mapToPokemonList(maps);
+  }
+
+  Future<List<PokemonResponse>> filterByType(String type) async {
+    final db = await instance.database;
+    final maps = await db.query(
+      'pokemon',
+      // karena typeofpokemon disimpan dalam JSON string,
+      // kita bisa LIKE agar match kata tersebut
+      where: 'typeofpokemon LIKE ?',
+      whereArgs: ['%$type%'],
+    );
+
+    return _mapToPokemonList(maps);
+  }
+
+  List<PokemonResponse> _mapToPokemonList(List<Map<String, Object?>> maps) {
+    return maps.map((map) {
+      return PokemonResponse(
+        id: map['id'] as String,
+        name: map['name'] as String,
+        imageurl: map['imageurl'] as String,
+        xdescription: map['xdescription'] as String,
+        ydescription: map['ydescription'] as String,
+        height: map['height'] as String,
+        category: map['category'] as String,
+        weight: map['weight'] as String,
+        typeofpokemon: (jsonDecode(map['typeofpokemon'] as String) as List)
+            .map((e) => typeofpokemonValues.map[e] ?? Typeofpokemon.NONE)
+            .toList(),
+        weaknesses: (jsonDecode(map['weaknesses'] as String) as List)
+            .map((e) => typeofpokemonValues.map[e] ?? Typeofpokemon.NONE)
+            .toList(),
+        evolutions: List<String>.from(jsonDecode(map['evolutions'] as String)),
+        abilities: List<String>.from(jsonDecode(map['abilities'] as String)),
+        hp: map['hp'] as int,
+        attack: map['attack'] as int,
+        defense: map['defense'] as int,
+        specialAttack: map['specialAttack'] as int,
+        specialDefense: map['specialDefense'] as int,
+        speed: map['speed'] as int,
+        total: map['total'] as int,
+        malePercentage: malePercentageValues.map[map['malePercentage']],
+        femalePercentage: malePercentageValues.map[map['femalePercentage']],
+        genderless: map['genderless'] as int,
+        cycles: cyclesValues.map[map['cycles']] ?? Cycles.EMPTY,
+        eggGroups: map['eggGroups'] as String,
+        evolvedfrom: map['evolvedfrom'] as String,
+        reason: map['reason'] as String,
+        baseExp: map['baseExp'] as String,
+      );
+    }).toList();
   }
 }
