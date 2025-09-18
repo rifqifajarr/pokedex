@@ -2,6 +2,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:pokedex/data/local/pokemon_adapter.dart';
 import 'package:pokedex/data/network/pokemon_response.dart';
 import 'package:pokedex/data/network/pokemon_service.dart';
+import 'package:pokedex/data/notification_service.dart';
 
 class PokemonRepository {
   final PokemonService service;
@@ -40,6 +41,14 @@ class PokemonRepository {
       if (pokemon != null) {
         final update = pokemon.copyWith(isFavorite: !pokemon.isFavorite);
         await box.putAt(index, update);
+        NotificationService().showNotification(
+          title: pokemon.isFavorite
+              ? "Pokemon removed from favorite"
+              : "New Favorite Pokemon!",
+          body: pokemon.isFavorite
+              ? "Sad to see ${pokemon.name} go.."
+              : "Hi! ${pokemon.name}, Good to have you onboard!",
+        );
       }
     }
   }

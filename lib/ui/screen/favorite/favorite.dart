@@ -9,6 +9,8 @@ import 'package:pokedex/ui/screen/favorite/bloc/favorite_state.dart';
 class Favorite extends StatelessWidget {
   const Favorite({super.key});
 
+  // TODO: show text when no data
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +37,7 @@ class Favorite extends StatelessWidget {
                     return Center(child: CircularProgressIndicator());
                   } else if (state is FavoriteErrorState) {
                     debugPrint(state.error);
-                    return Center(child: Text("Error Ketika Mendapatkan Data"));
+                    return Center(child: Text("Error When Fetching Data"));
                   } else if (state is FavoriteSuccessState) {
                     final data = state.data;
                     return ListView.separated(

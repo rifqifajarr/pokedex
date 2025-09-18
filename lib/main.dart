@@ -5,6 +5,7 @@ import 'package:pokedex/core/resources/colors.dart';
 import 'package:pokedex/core/resources/themes.dart';
 import 'package:pokedex/data/local/pokemon_adapter.dart';
 import 'package:pokedex/data/network/pokemon_service.dart';
+import 'package:pokedex/data/notification_service.dart';
 import 'package:pokedex/data/pokemon_repository.dart';
 import 'package:pokedex/ui/screen/detail/bloc/detail_bloc.dart';
 import 'package:pokedex/ui/screen/favorite/bloc/favorite_bloc.dart';
@@ -15,9 +16,12 @@ import 'package:pokedex/ui/screen/home/home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Hive.initFlutter();
   Hive.registerAdapter(PokemonModelAdapter());
   await Hive.openBox<PokemonModel>('pokemonBox');
+
+  NotificationService().initNotification();
 
   runApp(
     RepositoryProvider(

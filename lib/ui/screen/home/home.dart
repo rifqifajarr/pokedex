@@ -13,6 +13,8 @@ import 'package:pokedex/ui/screen/home/bloc/pokemon_state.dart';
 class Home extends StatefulWidget {
   const Home({super.key});
 
+  // TODO: show text when search give no data
+
   @override
   State<Home> createState() => _HomeState();
 }
