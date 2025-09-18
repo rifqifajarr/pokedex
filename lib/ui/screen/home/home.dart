@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pokedex/core/resources/themes.dart';
 import 'package:pokedex/core/utils/extension.dart';
 import 'package:pokedex/ui/components/custom_search_bar.dart';
 import 'package:pokedex/ui/components/custom_shimmer.dart';
 import 'package:pokedex/ui/components/pokemon_item.dart';
+import 'package:pokedex/ui/components/pokemon_type_dropdown.dart';
 import 'package:pokedex/ui/screen/detail/detail.dart';
 import 'package:pokedex/ui/screen/home/bloc/pokemon_bloc.dart';
 import 'package:pokedex/ui/screen/home/bloc/pokemon_event.dart';
@@ -41,35 +41,21 @@ class _HomeState extends State<Home> {
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-              child: CustomSearchBar(controller: _searchController),
+              child: CustomSearchBar(
+                controller: _searchController,
+                onChanged: (name) {
+                  context.read<PokemonBloc>().add(SearchPokemonEvent(name));
+                },
+                onCleared: () {
+                  context.read<PokemonBloc>().add(FetchPokemonEvent());
+                },
+              ),
             ),
             Divider(),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.grey[850],
-                  padding: EdgeInsets.symmetric(vertical: 9),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "All Type",
-                      style: textTheme(context).titleMedium?.copyWith(
-                        color: colorScheme(context).surface,
-                      ),
-                    ),
-                    SizedBox(width: 8),
-                    Icon(
-                      Icons.keyboard_arrow_down_rounded,
-                      color: colorScheme(context).surface,
-                      size: 24,
-                    ),
-                  ],
-                ),
-              ),
+            PokemonTypeDropdown(
+              onTypeSelected: (types) {
+                context.read<PokemonBloc>().add(FilterPokemonEvent(types));
+              },
             ),
             Expanded(
               child: BlocBuilder<PokemonBloc, PokemonState>(
@@ -92,7 +78,7 @@ class _HomeState extends State<Home> {
                     );
                   } else if (state is PokemonErrorState) {
                     debugPrint(state.error);
-                    return Center(child: Text("Error Ketika Mendapatkan Data"));
+                    return Center(child: Text("Error When Fetching Data"));
                   } else if (state is PokemonSuccessState) {
                     final data = state.data;
                     return ListView.separated(
@@ -121,8 +107,12 @@ class _HomeState extends State<Home> {
                       separatorBuilder: (context, index) =>
                           SizedBox(height: 12),
                     );
+                  } else if (state is NoPokemonState) {
+                    return Center(
+                      child: Text("Nobody catch that pokemon yet."),
+                    );
                   }
-                  return Center(child: Text("Tidak Ada Data"));
+                  return Center(child: Text("There's a problem"));
                 },
               ),
             ),

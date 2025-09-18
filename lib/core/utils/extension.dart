@@ -44,3 +44,24 @@ final malePercentageValuestoDouble = {
   "75%": 0.75,
   "87.5%": 0.875,
 };
+
+final List<String> pokemonTypes = [
+  'Bug',
+  'Dark',
+  'Dragon',
+  'Electric',
+  'Fairy',
+  'Fighting',
+  'Fire',
+  'Flying',
+  'Ghost',
+  'Grass',
+  'Ground',
+  'Ice',
+  'Normal',
+  'Poison',
+  'Psychic',
+  'Rock',
+  'Steel',
+  'Water',
+];

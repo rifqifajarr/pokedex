@@ -13,7 +13,7 @@ class PokemonRepository {
       final response = await service.fetchData();
       final pokemons = response.map((p) => p.toModel()).toList();
 
-      final box = await Hive.openBox('pokemonBox');
+      final box = await Hive.openBox<PokemonModel>('pokemonBox');
       await box.clear();
       await box.addAll(pokemons);
     } catch (e) {
@@ -30,6 +30,41 @@ class PokemonRepository {
     } else {
       return box.values.toList();
     }
+  }
+
+  Future<void> toggleFavorite(String id) async {
+    final box = Hive.box<PokemonModel>('pokemonBox');
+    final index = box.values.toList().indexWhere((element) => element.id == id);
+    if (index != -1) {
+      final pokemon = box.getAt(index);
+      if (pokemon != null) {
+        final update = pokemon.copyWith(isFavorite: !pokemon.isFavorite);
+        await box.putAt(index, update);
+      }
+    }
+  }
+
+  Future<List<PokemonModel>> getFavorites() async {
+    final box = Hive.box<PokemonModel>('pokemonBox');
+    return box.values.where((element) => element.isFavorite).toList();
+  }
+
+  Future<List<PokemonModel>> searchPokemons(String keyword) async {
+    final box = Hive.box<PokemonModel>('pokemonBox');
+    final query = keyword.toLowerCase();
+    return box.values
+        .where((element) => element.name.toLowerCase().contains(query))
+        .toList();
+  }
+
+  Future<List<PokemonModel>> filterByType(List<String> types) async {
+    final box = Hive.box<PokemonModel>('pokemonBox');
+    final query = types.map((e) => e.toLowerCase()).toList();
+
+    return box.values.where((element) {
+      final types = element.typeofpokemon.map((t) => t.toLowerCase()).toList();
+      return query.every((element) => types.contains(element));
+    }).toList();
   }
 
   Future<void> clearCache() async {

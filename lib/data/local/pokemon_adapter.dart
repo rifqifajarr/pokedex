@@ -2,7 +2,7 @@ import 'package:hive/hive.dart';
 
 part 'pokemon_adapter.g.dart';
 
-@HiveType(typeId: 0)
+@HiveType(typeId: 1)
 class PokemonModel extends HiveObject {
   @HiveField(0)
   String name;
@@ -85,6 +85,9 @@ class PokemonModel extends HiveObject {
   @HiveField(26)
   String baseExp;
 
+  @HiveField(27)
+  bool isFavorite;
+
   PokemonModel({
     required this.name,
     required this.id,
@@ -113,5 +116,39 @@ class PokemonModel extends HiveObject {
     required this.evolvedfrom,
     required this.reason,
     required this.baseExp,
+    this.isFavorite = false,
   });
+
+  PokemonModel copyWith({bool? isFavorite}) {
+    return PokemonModel(
+      name: name,
+      id: id,
+      imageurl: imageurl,
+      xdescription: xdescription,
+      ydescription: ydescription,
+      height: height,
+      category: category,
+      weight: weight,
+      typeofpokemon: typeofpokemon,
+      weaknesses: weaknesses,
+      evolutions: evolutions,
+      abilities: abilities,
+      hp: hp,
+      attack: attack,
+      defense: defense,
+      specialAttack: specialAttack,
+      specialDefense: specialDefense,
+      speed: speed,
+      total: total,
+      malePercentage: malePercentage,
+      femalePercentage: femalePercentage,
+      genderless: genderless,
+      cycles: cycles,
+      eggGroups: eggGroups,
+      evolvedfrom: evolvedfrom,
+      reason: reason,
+      baseExp: baseExp,
+      isFavorite: isFavorite ?? this.isFavorite,
+    );
+  }
 }

@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:pokedex/data/network/pokemon_response.dart';
 
@@ -16,7 +15,6 @@ class PokemonService {
 
       if (response.statusCode == 200) {
         final data = pokemonResponseFromJson(response.body);
-        debugPrint("masuk 200");
         return data;
       } else {
         throw Exception(response.body);
@@ -24,7 +22,6 @@ class PokemonService {
     } on SocketException {
       throw SocketException("No Internet!");
     } catch (e) {
-      debugPrint("masuk exception");
       throw Exception("Error fetchData() $e");
     }
   }

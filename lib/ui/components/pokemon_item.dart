@@ -15,6 +15,7 @@ class PokemonItem extends StatelessWidget {
   final String name;
   final List<String> elements;
   final String photoUrl;
+  // TODO: handle different configuration
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +126,13 @@ class BuildElement extends StatelessWidget {
           Text(
             type,
             style: TextStyle(
-              color: type == "Fighting" ? Colors.white : Colors.black,
+              color:
+                  type == "Fighting" ||
+                      type == "Dark" ||
+                      type == "Dragon" ||
+                      type == "Ghost"
+                  ? Colors.white
+                  : Colors.black,
             ),
           ),
         ],

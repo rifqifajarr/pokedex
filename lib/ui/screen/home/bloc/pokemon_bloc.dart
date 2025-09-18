@@ -16,5 +16,28 @@ class PokemonBloc extends Bloc<PokemonEvent, PokemonState> {
         emit(PokemonErrorState(e.toString()));
       }
     });
+
+    on<SearchPokemonEvent>((event, emit) async {
+      emit(PokemonLoadingState());
+      try {
+        final data = await _repository.searchPokemons(event.name);
+        if (data.isEmpty) {
+          emit(NoPokemonState());
+        }
+        emit(PokemonSuccessState(data));
+      } catch (e) {
+        emit(PokemonErrorState(e.toString()));
+      }
+    });
+
+    on<FilterPokemonEvent>((event, emit) async {
+      emit(PokemonLoadingState());
+      try {
+        final data = await _repository.filterByType(event.types);
+        emit(PokemonSuccessState(data));
+      } catch (e) {
+        emit(PokemonErrorState(e.toString()));
+      }
+    });
   }
 }

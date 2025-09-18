@@ -12,6 +12,8 @@ class PokemonInitialState extends PokemonState {}
 
 class PokemonLoadingState extends PokemonState {}
 
+class NoPokemonState extends PokemonState {}
+
 class PokemonErrorState extends PokemonState {
   final String error;
   const PokemonErrorState(this.error);

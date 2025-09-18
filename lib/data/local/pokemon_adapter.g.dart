@@ -8,7 +8,7 @@ part of 'pokemon_adapter.dart';
 
 class PokemonModelAdapter extends TypeAdapter<PokemonModel> {
   @override
-  final int typeId = 0;
+  final int typeId = 1;
 
   @override
   PokemonModel read(BinaryReader reader) {
@@ -44,13 +44,14 @@ class PokemonModelAdapter extends TypeAdapter<PokemonModel> {
       evolvedfrom: fields[24] as String,
       reason: fields[25] as String,
       baseExp: fields[26] as String,
+      isFavorite: fields[27] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, PokemonModel obj) {
     writer
-      ..writeByte(27)
+      ..writeByte(28)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -104,7 +105,9 @@ class PokemonModelAdapter extends TypeAdapter<PokemonModel> {
       ..writeByte(25)
       ..write(obj.reason)
       ..writeByte(26)
-      ..write(obj.baseExp);
+      ..write(obj.baseExp)
+      ..writeByte(27)
+      ..write(obj.isFavorite);
   }
 
   @override
