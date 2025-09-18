@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:pokedex/data/pokemon_response.dart';
+import 'package:pokedex/data/network/pokemon_response.dart';
 
 class PokemonService {
   static const String _baseUrl =

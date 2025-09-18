@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:pokedex/data/pokemon_response.dart';
+import 'package:pokedex/data/local/pokemon_adapter.dart';
 
 abstract class PokemonState extends Equatable {
   const PokemonState();
@@ -21,11 +21,9 @@ class PokemonErrorState extends PokemonState {
 }
 
 class PokemonSuccessState extends PokemonState {
-  final List<PokemonResponse> data;
+  final List<PokemonModel> data;
   const PokemonSuccessState(this.data);
 
   @override
   List<Object?> get props => [data];
 }
-
-class DataAddedToDb extends PokemonState {}

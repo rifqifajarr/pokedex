@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:pokedex/data/pokemon_response.dart';
+import 'package:pokedex/data/local/pokemon_adapter.dart';
 
 abstract class FavoriteState extends Equatable {
   const FavoriteState();
@@ -21,7 +21,7 @@ class FavoriteErrorState extends FavoriteState {
 }
 
 class FavoriteSuccessState extends FavoriteState {
-  final List<PokemonResponse> data;
+  final List<PokemonModel> data;
   const FavoriteSuccessState(this.data);
 
   @override

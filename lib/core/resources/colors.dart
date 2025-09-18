@@ -19,5 +19,5 @@ extension CustomColors on ColorScheme {
   Color get psychic => Color(0xFFFA7179);
   Color get terrestrial => Color(0xFFD97845);
   Color get poisonous => Color(0xFFB567CE);
-  Color get flying => Color(0xFFB567CE);
+  Color get flying => Color(0xFF89AAE3);
 }

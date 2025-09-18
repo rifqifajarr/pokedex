@@ -2,6 +2,8 @@
 
 import 'dart:convert';
 
+import 'package:pokedex/data/local/pokemon_adapter.dart';
+
 List<PokemonResponse> pokemonResponseFromJson(String str) =>
     List<PokemonResponse>.from(
       json.decode(str).map((x) => PokemonResponse.fromJson(x)),
@@ -242,5 +244,44 @@ class EnumValues<T> {
   Map<T, String> get reverse {
     reverseMap = map.map((k, v) => MapEntry(v, k));
     return reverseMap;
+  }
+}
+
+// mapper untuk ke class model
+extension PokemonResponseMapper on PokemonResponse {
+  PokemonModel toModel() {
+    return PokemonModel(
+      name: name,
+      id: id,
+      imageurl: imageurl,
+      xdescription: xdescription,
+      ydescription: ydescription,
+      height: height,
+      category: category,
+      weight: weight,
+      typeofpokemon: typeofpokemon
+          .map((type) => typeofpokemonValues.reverse[type] ?? '')
+          .toList(),
+      weaknesses: weaknesses
+          .map((type) => typeofpokemonValues.reverse[type] ?? '')
+          .toList(),
+      evolutions: evolutions,
+      abilities: abilities,
+      hp: hp,
+      attack: attack,
+      defense: defense,
+      specialAttack: specialAttack,
+      specialDefense: specialDefense,
+      speed: speed,
+      total: total,
+      malePercentage: malePercentageValues.reverse[malePercentage] ?? '',
+      femalePercentage: malePercentageValues.reverse[femalePercentage] ?? '',
+      genderless: genderless,
+      cycles: cyclesValues.reverse[cycles] ?? '',
+      eggGroups: eggGroups,
+      evolvedfrom: evolvedfrom,
+      reason: reason,
+      baseExp: baseExp,
+    );
   }
 }

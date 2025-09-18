@@ -1,36 +1,20 @@
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pokedex/data/db_helper.dart';
-import 'package:pokedex/data/pokemon_response.dart';
-import 'package:pokedex/data/pokemon_service.dart';
+import 'package:pokedex/data/pokemon_repository.dart';
 import 'package:pokedex/ui/screen/home/bloc/pokemon_event.dart';
 import 'package:pokedex/ui/screen/home/bloc/pokemon_state.dart';
 
 class PokemonBloc extends Bloc<PokemonEvent, PokemonState> {
-  final PokemonService _service;
-  final db = PokemonDatabase.instance;
-  final List<PokemonResponse> _remoteData = [];
+  final PokemonRepository _repository;
 
-  PokemonBloc(this._service) : super(PokemonInitialState()) {
+  PokemonBloc(this._repository) : super(PokemonInitialState()) {
     on<FetchPokemonEvent>((event, emit) async {
       emit(PokemonLoadingState());
       try {
-        final data = await _service.fetchData();
-        debugPrint("masuk try bloc");
-        _remoteData.addAll(data);
+        final data = await _repository.getPokemons();
         emit(PokemonSuccessState(data));
       } catch (e) {
         emit(PokemonErrorState(e.toString()));
       }
-    });
-    on<PutDataToDbEvent>((event, emit) async {
-      debugPrint("masukkk");
-      for (final p in _remoteData) {
-        await db.insertPokemon(p);
-      }
-      final test = await db.getAllPokemon();
-      debugPrint("isi db: $test");
-      emit(DataAddedToDb());
     });
   }
 }

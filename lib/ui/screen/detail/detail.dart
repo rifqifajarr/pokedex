@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:pokedex/core/resources/colors.dart';
 import 'package:pokedex/core/resources/themes.dart';
 import 'package:pokedex/core/utils/extension.dart';
-import 'package:pokedex/data/pokemon_response.dart';
+import 'package:pokedex/data/local/pokemon_adapter.dart';
 import 'package:pokedex/ui/components/custom_image.dart';
 import 'package:pokedex/ui/components/pokemon_item.dart';
 
 class Detail extends StatefulWidget {
   const Detail({super.key, required this.data});
 
-  final PokemonResponse data;
+  final PokemonModel data;
 
   @override
   State<Detail> createState() => _DetailState();
@@ -42,7 +42,9 @@ class _DetailState extends State<Detail> {
                         size: 28,
                         color: colorScheme(context).surface,
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
                     ),
                   ),
                   Positioned(
@@ -140,8 +142,9 @@ class _DetailState extends State<Detail> {
                           height: 8,
                           child: LinearProgressIndicator(
                             value:
-                                malePercentageValuestoDouble[malePercentageValues
-                                    .reverse[widget.data.malePercentage]],
+                                malePercentageValuestoDouble[widget
+                                    .data
+                                    .malePercentage],
                             backgroundColor: colorScheme(context).psychic,
                             valueColor: AlwaysStoppedAnimation<Color>(
                               colorScheme(context).dragon,
@@ -156,10 +159,7 @@ class _DetailState extends State<Detail> {
                             children: [
                               const Icon(Icons.male, size: 18),
                               Text(
-                                malePercentageValues.reverse[widget
-                                        .data
-                                        .malePercentage] ??
-                                    "",
+                                widget.data.malePercentage,
                                 style: textTheme(context).labelMedium,
                               ),
                             ],
@@ -169,10 +169,7 @@ class _DetailState extends State<Detail> {
                             children: [
                               const Icon(Icons.female, size: 18),
                               Text(
-                                malePercentageValues.reverse[widget
-                                        .data
-                                        .femalePercentage] ??
-                                    "",
+                                widget.data.femalePercentage,
                                 style: textTheme(context).labelMedium,
                               ),
                             ],
@@ -213,7 +210,7 @@ class _DetailState extends State<Detail> {
   }
 }
 
-Widget _buildEvolution(BuildContext context, PokemonResponse data) {
+Widget _buildEvolution(BuildContext context, PokemonModel data) {
   return Container(
     decoration: BoxDecoration(
       border: BoxBorder.all(),
@@ -277,11 +274,11 @@ Widget _buildEvolution(BuildContext context, PokemonResponse data) {
                           width: 92,
                           height: 22,
                           decoration: BoxDecoration(
-                            color: getTypeColor(context, data.typeofpokemon[1]),
+                            color: getTypeColor(context, data.typeofpokemon[0]),
                             borderRadius: BorderRadius.circular(50),
                           ),
                           child: Image.asset(
-                            getTypeIconAsset(data.typeofpokemon[1]),
+                            getTypeIconAsset(data.typeofpokemon[0]),
                             width: 22,
                             height: 22,
                           ),

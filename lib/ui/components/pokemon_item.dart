@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:pokedex/core/resources/colors.dart';
 import 'package:pokedex/core/resources/themes.dart';
 import 'package:pokedex/core/utils/extension.dart';
-import 'package:pokedex/data/pokemon_response.dart';
 import 'package:pokedex/ui/components/custom_image.dart';
 
 class PokemonItem extends StatelessWidget {
@@ -14,7 +13,7 @@ class PokemonItem extends StatelessWidget {
   });
 
   final String name;
-  final List<Typeofpokemon> elements;
+  final List<String> elements;
   final String photoUrl;
 
   @override
@@ -100,7 +99,7 @@ class PokemonItem extends StatelessWidget {
 class BuildElement extends StatelessWidget {
   const BuildElement({super.key, required this.type});
 
-  final Typeofpokemon type;
+  final String type;
 
   @override
   Widget build(BuildContext context) {
@@ -124,11 +123,9 @@ class BuildElement extends StatelessWidget {
           ),
           SizedBox(width: 6),
           Text(
-            typeofpokemonValues.reverse[type] ?? "Unknown",
+            type,
             style: TextStyle(
-              color: type == Typeofpokemon.FIGHTING
-                  ? Colors.white
-                  : Colors.black,
+              color: type == "Fighting" ? Colors.white : Colors.black,
             ),
           ),
         ],
@@ -137,45 +134,45 @@ class BuildElement extends StatelessWidget {
   }
 }
 
-Color getTypeColor(BuildContext context, Typeofpokemon type) {
+Color getTypeColor(BuildContext context, String type) {
   final colors = colorScheme(context);
 
-  switch (type) {
-    case Typeofpokemon.BUG:
+  switch (type.toLowerCase()) {
+    case 'bug':
       return colors.insect;
-    case Typeofpokemon.DARK:
+    case 'dark':
       return colors.nocturnal;
-    case Typeofpokemon.DRAGON:
+    case 'dragon':
       return colors.dragon;
-    case Typeofpokemon.ELECTRIC:
+    case 'electric':
       return colors.electric;
-    case Typeofpokemon.FAIRY:
+    case 'fairy':
       return colors.fairy;
-    case Typeofpokemon.FIGHTING:
+    case 'fighting':
       return colors.fighter;
-    case Typeofpokemon.FIRE:
+    case 'fire':
       return colors.fire;
-    case Typeofpokemon.FLYING:
+    case 'flying':
       return colors.flying;
-    case Typeofpokemon.GHOST:
+    case 'ghost':
       return colors.ghost;
-    case Typeofpokemon.GRASS:
+    case 'grass':
       return colors.grass;
-    case Typeofpokemon.GROUND:
+    case 'ground':
       return colors.terrestrial;
-    case Typeofpokemon.ICE:
+    case 'ice':
       return colors.ice;
-    case Typeofpokemon.NORMAL:
+    case 'normal':
       return colors.normal;
-    case Typeofpokemon.POISON:
+    case 'poison':
       return colors.poisonous;
-    case Typeofpokemon.PSYCHIC:
+    case 'psychic':
       return colors.psychic;
-    case Typeofpokemon.ROCK:
+    case 'rock':
       return colors.stone;
-    case Typeofpokemon.STEEL:
+    case 'steel':
       return colors.metal;
-    case Typeofpokemon.WATER:
+    case 'water':
       return colors.water;
     default:
       return colors.allType;

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:pokedex/data/pokemon_response.dart';
 
 extension WidgetExtensions on Widget {
   Widget dismissKeyboardOnTap(BuildContext context) {
@@ -10,30 +9,30 @@ extension WidgetExtensions on Widget {
   }
 }
 
-final Map<Typeofpokemon, String> typeAssetMap = {
-  Typeofpokemon.BUG: 'assets/type/bug.png',
-  Typeofpokemon.DARK: 'assets/type/ghost.png',
-  Typeofpokemon.DRAGON: 'assets/type/dragon.png',
-  Typeofpokemon.ELECTRIC: 'assets/type/electric.png',
-  Typeofpokemon.FAIRY: 'assets/type/fairy.png',
-  Typeofpokemon.FIGHTING: 'assets/type/fighter.png',
-  Typeofpokemon.FIRE: 'assets/type/fire.png',
-  Typeofpokemon.FLYING: 'assets/type/flying.png',
-  Typeofpokemon.GHOST: 'assets/type/ghost.png',
-  Typeofpokemon.GRASS: 'assets/type/grass.png',
-  Typeofpokemon.GROUND: 'assets/type/terrestrial.png',
-  Typeofpokemon.ICE: 'assets/type/ice.png',
-  Typeofpokemon.NONE: 'assets/type/normal.png',
-  Typeofpokemon.NORMAL: 'assets/type/normal.png',
-  Typeofpokemon.POISON: 'assets/type/poison.png',
-  Typeofpokemon.PSYCHIC: 'assets/type/psychic.png',
-  Typeofpokemon.ROCK: 'assets/type/stone.png',
-  Typeofpokemon.STEEL: 'assets/type/metal.png',
-  Typeofpokemon.WATER: 'assets/type/water.png',
+final Map<String, String> typeAssetMap = {
+  'bug': 'assets/type/bug.png',
+  'dark': 'assets/type/nocturnal.png',
+  'dragon': 'assets/type/dragon.png',
+  'electric': 'assets/type/electric.png',
+  'fairy': 'assets/type/fairy.png',
+  'fighting': 'assets/type/fighter.png',
+  'fire': 'assets/type/fire.png',
+  'flying': 'assets/type/flying.png',
+  'ghost': 'assets/type/ghost.png',
+  'grass': 'assets/type/grass.png',
+  'ground': 'assets/type/terrestrial.png',
+  'ice': 'assets/type/ice.png',
+  'normal': 'assets/type/normal.png',
+  'poison': 'assets/type/poison.png',
+  'psychic': 'assets/type/psychic.png',
+  'rock': 'assets/type/stone.png',
+  'steel': 'assets/type/metal.png',
+  'water': 'assets/type/water.png',
+  'none': 'assets/type/normal.png',
 };
 
-String getTypeIconAsset(Typeofpokemon type) {
-  return typeAssetMap[type] ?? 'assets/icons/none.png';
+String getTypeIconAsset(String type) {
+  return typeAssetMap[type.toLowerCase()] ?? 'assets/type/normal.png';
 }
 
 final malePercentageValuestoDouble = {
