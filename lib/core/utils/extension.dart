@@ -35,6 +35,12 @@ String getTypeIconAsset(String type) {
   return typeAssetMap[type.toLowerCase()] ?? 'assets/type/normal.png';
 }
 
+String getTypeSmallIconAsset(String type) {
+  final path =
+      typeAssetMap[type.toLowerCase()] ?? 'assets/type/normal_small.png';
+  return path.replaceFirst('.png', '_small.png');
+}
+
 final malePercentageValuestoDouble = {
   "0%": 0.0,
   "100%": 1.0,

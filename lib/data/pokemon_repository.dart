@@ -67,6 +67,11 @@ class PokemonRepository {
     }).toList();
   }
 
+  Future<List<PokemonModel>> getPokemonByIds(List<String> ids) async {
+    final box = Hive.box<PokemonModel>('pokemonBox');
+    return box.values.where((element) => ids.contains(element.id)).toList();
+  }
+
   Future<void> clearCache() async {
     final box = Hive.box<PokemonModel>('pokemonBox');
     await box.clear();

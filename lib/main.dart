@@ -6,6 +6,7 @@ import 'package:pokedex/core/resources/themes.dart';
 import 'package:pokedex/data/local/pokemon_adapter.dart';
 import 'package:pokedex/data/network/pokemon_service.dart';
 import 'package:pokedex/data/pokemon_repository.dart';
+import 'package:pokedex/ui/screen/detail/bloc/detail_bloc.dart';
 import 'package:pokedex/ui/screen/favorite/bloc/favorite_bloc.dart';
 import 'package:pokedex/ui/screen/favorite/favorite.dart';
 import 'package:pokedex/ui/screen/home/bloc/pokemon_bloc.dart';
@@ -30,6 +31,7 @@ class MainApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => PokemonBloc(repository)),
         BlocProvider(create: (context) => FavoriteBloc(repository)),
+        BlocProvider(create: (context) => DetailBloc(repository)),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
