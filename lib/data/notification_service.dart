@@ -3,7 +3,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 class NotificationService {
   final notificationPlugin = FlutterLocalNotificationsPlugin();
 
-  final bool _isInitialized = false;
+  bool _isInitialized = false;
 
   bool get isInitialized => _isInitialized;
 
@@ -26,6 +26,12 @@ class NotificationService {
     );
 
     await notificationPlugin.initialize(initSettings);
+
+    final androidImpl = notificationPlugin
+        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+    await androidImpl?.requestNotificationsPermission();
+
+    _isInitialized = true;
   }
 
   NotificationDetails notificationDetails() {
@@ -50,7 +56,7 @@ class NotificationService {
       id,
       title,
       body,
-      const NotificationDetails(),
+      notificationDetails(),
     );
   }
 }
