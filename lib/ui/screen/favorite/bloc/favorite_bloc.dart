@@ -10,7 +10,7 @@ class FavoriteBloc extends Bloc<FavoriteEvent, FavoriteState> {
     on<FetchFavoriteEvent>((event, emit) async {
       emit(FavoriteLoadingState());
       try {
-        final favorites = await _repository.getPokemons();
+        final favorites = await _repository.getFavorites();
         emit(FavoriteSuccessState(favorites));
       } catch (e) {
         emit(FavoriteErrorState(e.toString()));

@@ -4,6 +4,7 @@ import 'package:pokedex/core/resources/colors.dart';
 import 'package:pokedex/core/resources/themes.dart';
 import 'package:pokedex/core/utils/extension.dart';
 import 'package:pokedex/data/local/pokemon_adapter.dart';
+import 'package:pokedex/data/pokemon_repository.dart';
 import 'package:pokedex/ui/components/custom_image.dart';
 import 'package:pokedex/ui/components/custom_shimmer.dart';
 import 'package:pokedex/ui/components/evolution_item.dart';
@@ -11,6 +12,9 @@ import 'package:pokedex/ui/components/type_item.dart';
 import 'package:pokedex/ui/screen/detail/bloc/detail_bloc.dart';
 import 'package:pokedex/ui/screen/detail/bloc/detail_event.dart';
 import 'package:pokedex/ui/screen/detail/bloc/detail_state.dart';
+import 'package:pokedex/ui/screen/favorite/bloc/favorite_bloc.dart';
+import 'package:pokedex/ui/screen/favorite/bloc/favorite_event.dart';
+import 'package:pokedex/ui/screen/favorite/bloc/favorite_state.dart';
 
 class Detail extends StatefulWidget {
   const Detail({super.key, required this.data});
@@ -40,8 +44,9 @@ class _DetailState extends State<Detail> {
               children: [
                 _buildImage(
                   context,
-                  widget.data.typeofpokemon.first,
                   widget.data.imageurl,
+                  widget.data.typeofpokemon.first,
+                  widget.data.id,
                 ),
                 _buildData(context, widget.data),
                 Padding(
@@ -104,7 +109,12 @@ class _DetailState extends State<Detail> {
   }
 }
 
-Widget _buildImage(BuildContext context, String type, String imageUrl) {
+Widget _buildImage(
+  BuildContext context,
+  String imageUrl,
+  String type,
+  String id,
+) {
   final color = getTypeColor(context, type);
 
   return SizedBox(
@@ -113,7 +123,7 @@ Widget _buildImage(BuildContext context, String type, String imageUrl) {
     child: Stack(
       children: [
         Transform.translate(
-          offset: Offset(0, -520),
+          offset: const Offset(0, -520),
           child: OverflowBox(
             maxWidth: double.infinity,
             maxHeight: double.infinity,
@@ -140,13 +150,28 @@ Widget _buildImage(BuildContext context, String type, String imageUrl) {
         Positioned(
           top: 19,
           right: 32,
-          child: IconButton(
-            icon: Icon(
-              Icons.favorite_border,
-              size: 28,
-              color: colorScheme(context).surface,
-            ),
-            onPressed: () {},
+          child: BlocBuilder<FavoriteBloc, FavoriteState>(
+            builder: (context, state) {
+              bool isFavorite = false;
+
+              if (state is FavoriteSuccessState) {
+                isFavorite = state.data.any((pokemon) => pokemon.id == id);
+              }
+
+              return IconButton(
+                icon: Icon(
+                  isFavorite ? Icons.favorite : Icons.favorite_border_outlined,
+                  size: 28,
+                  color: isFavorite
+                      ? colorScheme(context).error
+                      : colorScheme(context).surface,
+                ),
+                onPressed: () {
+                  context.read<PokemonRepository>().toggleFavorite(id);
+                  context.read<FavoriteBloc>().add(FetchFavoriteEvent());
+                },
+              );
+            },
           ),
         ),
         Positioned(

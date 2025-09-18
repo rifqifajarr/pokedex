@@ -8,6 +8,7 @@ import 'package:pokedex/data/network/pokemon_service.dart';
 import 'package:pokedex/data/pokemon_repository.dart';
 import 'package:pokedex/ui/screen/detail/bloc/detail_bloc.dart';
 import 'package:pokedex/ui/screen/favorite/bloc/favorite_bloc.dart';
+import 'package:pokedex/ui/screen/favorite/bloc/favorite_event.dart';
 import 'package:pokedex/ui/screen/favorite/favorite.dart';
 import 'package:pokedex/ui/screen/home/bloc/pokemon_bloc.dart';
 import 'package:pokedex/ui/screen/home/home.dart';
@@ -18,19 +19,27 @@ void main() async {
   Hive.registerAdapter(PokemonModelAdapter());
   await Hive.openBox<PokemonModel>('pokemonBox');
 
-  runApp(MainApp());
+  runApp(
+    RepositoryProvider(
+      create: (context) => PokemonRepository(service: PokemonService()),
+      child: MainApp(),
+    ),
+  );
 }
 
 class MainApp extends StatelessWidget {
-  MainApp({super.key});
-  final repository = PokemonRepository(service: PokemonService());
+  const MainApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final repository = context.read<PokemonRepository>();
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => PokemonBloc(repository)),
-        BlocProvider(create: (context) => FavoriteBloc(repository)),
+        BlocProvider(
+          create: (context) =>
+              FavoriteBloc(repository)..add(FetchFavoriteEvent()),
+        ),
         BlocProvider(create: (context) => DetailBloc(repository)),
       ],
       child: MaterialApp(
@@ -39,7 +48,7 @@ class MainApp extends StatelessWidget {
           context,
         ).copyWith(textTheme: textTheme(context).apply(fontFamily: 'Poppins')),
         home: FutureBuilder(
-          future: repository.fetchAndCachePokemons(),
+          future: repository.getPokemons(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return Scaffold(

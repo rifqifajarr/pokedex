@@ -97,6 +97,7 @@ class _HomeState extends State<Home> {
                               );
                             },
                             child: PokemonItem(
+                              id: data[index].id,
                               name: data[index].name,
                               elements: data[index].typeofpokemon,
                               photoUrl: data[index].imageurl,

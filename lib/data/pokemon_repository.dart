@@ -8,7 +8,7 @@ class PokemonRepository {
 
   PokemonRepository({required this.service});
 
-  Future<void> fetchAndCachePokemons() async {
+  Future<void> _fetchAndCachePokemons() async {
     try {
       final response = await service.fetchData();
       final pokemons = response.map((p) => p.toModel()).toList();
@@ -25,7 +25,7 @@ class PokemonRepository {
     final box = Hive.box<PokemonModel>('pokemonBox');
 
     if (box.isEmpty) {
-      await fetchAndCachePokemons();
+      await _fetchAndCachePokemons();
       return box.values.toList();
     } else {
       return box.values.toList();
@@ -46,7 +46,14 @@ class PokemonRepository {
 
   Future<List<PokemonModel>> getFavorites() async {
     final box = Hive.box<PokemonModel>('pokemonBox');
-    return box.values.where((element) => element.isFavorite).toList();
+    return box.values.where((element) => element.isFavorite == true).toList();
+  }
+
+  Future<bool> isFavorite(String id) async {
+    final box = Hive.box<PokemonModel>('pokemonBox');
+    final pokemon = box.get(id);
+
+    return pokemon?.isFavorite ?? false;
   }
 
   Future<List<PokemonModel>> searchPokemons(String keyword) async {

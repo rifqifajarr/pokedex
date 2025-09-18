@@ -1,26 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pokedex/core/resources/themes.dart';
-import 'package:pokedex/ui/components/custom_shimmer.dart';
 import 'package:pokedex/ui/components/pokemon_item.dart';
 import 'package:pokedex/ui/screen/detail/detail.dart';
 import 'package:pokedex/ui/screen/favorite/bloc/favorite_bloc.dart';
-import 'package:pokedex/ui/screen/favorite/bloc/favorite_event.dart';
 import 'package:pokedex/ui/screen/favorite/bloc/favorite_state.dart';
 
-class Favorite extends StatefulWidget {
+class Favorite extends StatelessWidget {
   const Favorite({super.key});
-
-  @override
-  State<Favorite> createState() => _FavoriteState();
-}
-
-class _FavoriteState extends State<Favorite> {
-  @override
-  void initState() {
-    super.initState();
-    context.read<FavoriteBloc>().add(FetchFavoriteEvent());
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,20 +32,7 @@ class _FavoriteState extends State<Favorite> {
                 builder: (context, state) {
                   if (state is FavoriteInitialState ||
                       state is FavoriteLoadingState) {
-                    return ListView.separated(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: 5,
-                      itemBuilder: (context, index) => Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: ShimmeringObject(
-                          height: 118,
-                          radius: BorderRadius.circular(15),
-                        ),
-                      ),
-                      separatorBuilder: (context, index) =>
-                          const SizedBox(height: 12),
-                    );
+                    return Center(child: CircularProgressIndicator());
                   } else if (state is FavoriteErrorState) {
                     debugPrint(state.error);
                     return Center(child: Text("Error Ketika Mendapatkan Data"));
@@ -80,6 +54,7 @@ class _FavoriteState extends State<Favorite> {
                               );
                             },
                             child: PokemonItem(
+                              id: data[index].id,
                               name: data[index].name,
                               elements: data[index].typeofpokemon,
                               photoUrl: data[index].imageurl,
@@ -91,7 +66,9 @@ class _FavoriteState extends State<Favorite> {
                           SizedBox(height: 12),
                     );
                   }
-                  return Center(child: Text("Tidak Ada Data"));
+                  return Center(
+                    child: Text("You don't have a favorite Pokemon Yet"),
+                  );
                 },
               ),
             ),
